@@ -1,12 +1,12 @@
-##React-Native 最佳实战之开发环境搭建及扩展
+## React-Native 最佳实战之开发环境搭建及扩展
 
-###引言
+### 引言
 
 React Native的出现，为APP开发者们带来了冲动和激情，令Native开发者和Web开发者都为之痴迷。瞬间各类技术论坛、技术社区甚至出版社都争先报道其相关内容。然而对于一般的初学者来说，最简单要求莫过于按照官方提供的向导来完成基于React Native的处女之作。就是这么简单的一个要求，却把无数开发者拒之门外。其中原因在于初学者在按照教程搭建的过程中，总会出现这样那样的问题，给开发者们的锐气重重一击。下文将以其中一些比较突出的问题为起点，从开发前和开发中两方面来加以分析并给出相应的解决方案，希望能够给广大开发者们提供些许实战经验，少走一些不必要的弯路。
 
-##一、开发前
+## 一、开发前
 
-###面临的问题
+### 面临的问题
 
 按照官方的向导，在Homebrew 、Watchman、Flow、nvm、node等运行环境安装完后，要做的第一件事情便是安装React Native命令行工具并由其初始化React Native项目。代码如下：
 
@@ -28,7 +28,7 @@ $ react-native init AwesomeProject
 +	随着React Native 项目的增多，占用空间越大
 
 
-###原因分析
+### 原因分析
 
 React Native 命令行环境搭建困难，主要是慢，为什么呢，从代码
 
@@ -134,21 +134,21 @@ var documentedCommands = {
 
 
 
-###解决办法
+### 解决办法
 
-####1、私有NPM搭建
+#### 1、私有NPM搭建
 
 虽然上面讲的国内镜像，已使NPM的下载速度很快啦，但是仍然不如在自己内网架设个NPM私有服务器，给团队成员提供更快捷的下载速度。架设私服，除了速度快以外，还有一个重要的原因就是一些内部的隐私模块也可以发在私服上供内部成员使用。
 市面上的NPM私服也有很多，这里推荐的是一个叫“sinopia”的NPM私服。“sinopia”的做法是优先从自己的仓库中拉取模块，如果发现没有，便从远端的NPM服务器拉取。也许有的开发者早已注意到，这个私服其实在“react-native-cli”的NPM库中[react-native-cli](https://www.npmjs.com/package/react-native-cli)就有介绍，笔者猜想应该是Facebook也推荐诸位使用“sinopia”来搭建NPM私服吧。“sinopia”的github地址为：[sinopia](https://github.com/rlidwka/sinopia)。“sinopia”的搭建比较简单，步骤如下：
 
-#####-安装命令：
+##### -安装命令：
 
 ```
 $ npm install -g sinopia
 
 ```
 
-#####-启动命令：
+##### -启动命令：
 
 ```
 $ sinopia
@@ -193,21 +193,21 @@ logs:
 ```
 如果想看更完整的配置可以参考这里[full.yaml](https://github.com/rlidwka/sinopia/blob/master/conf/full.yaml)。
 
-#####-创建新用户
+##### -创建新用户
 
 ```
 $ npm adduser --registry http://localhost:4873
 ```
 按照命令行中的提示，依次输入Username、Passworld、Email即可完成用户的创建。
 
-#####-设置npm镜像地址
+##### -设置npm镜像地址
 
 ```
 $ npm set registry http://localhost:4873/
 
 ```
 
-#####-发布npm包
+##### -发布npm包
 
 在发布模块前，需要先登录
 
@@ -226,7 +226,7 @@ $ npm publish
 
 若没有“package.json”文件的话，需先执行“npm init”进行创建，然后执行上面的命令即可将模块推送到自己的NPM服务器上了。这样我们在安装该模块的时候，便是从自己的NPM服务器上下载了。
 
-#####-远端访问
+##### -远端访问
 
 上面只是在本地搭起了NPM服务器，只能通过本地来访问，如果要做到远端访问的话，需要这样来启动“sinopia”：
 
@@ -234,7 +234,7 @@ $ npm publish
 $ sinopia -l IP地址:端口
 ```
 
-#####-配置React Native的sinopia服务器
+##### -配置React Native的sinopia服务器
 
 对于react-native的配置，官网建议修改packages和max_body_size的配置如下：
 
@@ -288,12 +288,12 @@ $ npm set registry http://host:port/ //要记得切换到sinopia服务器哦，�
 $ npm publish
 ```
 
-####2、实现多版本管理
+#### 2、实现多版本管理
 
 如果说sinopia是用来解决速度的问题，那么多版本的管理可以说是用来解决体积的问题。做过node.js开发的同学，都清楚nvm，它是nodejs的版本管理工具，甚至包括React Native的官网也有谈到使用nvm来安装node.js。在react-native版本迭代如此频繁的阶段，居然没有react-native的版本管理工具，这让开发人员们很是受伤。所以，这里将尝试着设计一个react-native的版本管理工具，我们可以亲切的叫它rnvm（react-native version manager）。在了解rnvm的思路前，先了解下rnvm的使用场景.
 
 
-#####-rnvm的使用场景
+##### -rnvm的使用场景
 
 rnvm如其名字中的那样，主要是对react-native的版本进行管理的。那么它的使用场景都有哪些呢。这的从一个React Native项目的的获得方式说起。通常情况下有如下几种方式：
 
@@ -309,7 +309,7 @@ c、通过拷贝获得
 
 然而，这并不是rvnm的优势。rnvm的核心思想是将react-native模块安装在全局目录下，这样每个React Native项目在使用的时候，不需要在本地目录中安装一份，只需要调用全局目录中的react-native即可，给开发者节省了不少的空间。再者rnvm给React Native项目中的对react-native版本的使用带来了灵活性，所以rnvm更适合多React Native项目的开发。
 
-#####-rnvm的目录结构
+##### -rnvm的目录结构
 
 ```
 prefix_node_modules
@@ -332,7 +332,7 @@ react_native_modules
 ```
 还是在用户目录下创建react_native_modules、prefix_node_modules两个目录结构。react_native_modules的目录和上面sinopia发布模块用的是一样的结构，都是用来存放模块的。默认的全局安装目录在“/usr/local/lib/node_modules”，这里的prefix_node_modules目录就是用替换原有的全局安装目录，这样做的好处是不需要每次装全局模块时都要sudo。
 
-#####-rnvm的执行流程
+##### -rnvm的执行流程
 
 这里需要结合一个场景来分析rnvm的执行流程，某天开发人员从github clone了一份别人写的React Native的代码，重命名为mycloneproject，想在本地运行起来，正常情况下应该是进入mycloneproject项目的根目录，然后执行npm install。这样就会将package.json中指定的所有依赖模块都安装在当前目录的node_modules目录中。那么使用rnvm是怎么安装的呢。
 
@@ -375,7 +375,7 @@ rnmv的github地址：[rnvm](https://github.com/GammaGos/rnvm/)
 
 
 
-####3、完整架构
+#### 3、完整架构
 ![](../images/rnvm.png)
 
 图1 基于rnvm的开发架构图
@@ -404,15 +404,15 @@ rnmv的github地址：[rnvm](https://github.com/GammaGos/rnvm/)
 10、然后，在将改模块publish到sinopia服务器上。
 
 
-##二、开发中
+## 二、开发中
 
 ###面临的问题
 
 通常项目中，App需要开发Android和iOS两个版本,经常会用到一些图片，并需要将这些图片打入App中。当开发iOS版本时，需要手动加载这些图片资源到xcode中。当开发Android版本时又需要手动的加载一次。这样，当某天某个图片需要更新时，就需要对Android和iOS都进行修改。如果要是能够让两个版本引用同一个图片,那么就会使开发变得简便。
 
-###解决办法
+### 解决办法
 
-####起初的想法
+#### 起初的想法
 
 我们可以借助shell脚本创建、搬运、解析文件的能力，加上一些自定义的规则，来实现Andorid、iOS两个版本引用同一个图片的功能。
 
@@ -469,9 +469,9 @@ react-native run-android
 
 在iOS版本中，我们可以通过开发一个shell脚本，并把它添加到Xcode项目的run script phase中，待启动iOS项目后，却发现资源文件根本读不到。这是为什么呢?
 
-####原因分析
+#### 原因分析
 
-#####-iOS中React Native项目启动顺序：
+##### -iOS中React Native项目启动顺序：
 
 +	在启动React Native Xcode项目时，会先加载项目所依赖的React项目，接着运行React项目中事先定义好的run script phase，最后运行packger.sh。
 
@@ -484,7 +484,7 @@ node "$THIS_DIR/../local-cli/cli.js" start "$@"
 
 +	待server启动成功后，才运行到iOS native code。也就是这个时候，才会运行Xcode项目中，事先定义好的run script phase中指定的shell脚本，而在这个时候，在shell脚本中创建资源路径是没有用的。所以就会出现了上面资源文件读不到的情况。
 
-#####-Android中React Native项目启动顺序：
+##### -Android中React Native项目启动顺序：
 
 +	首先执行上面封装好的Unix executable文件，该文件中会调用资源文件生成的代码，将资源文件生成。
 
@@ -496,7 +496,7 @@ node "$THIS_DIR/../local-cli/cli.js" start "$@"
 
 
 
-####最终的解决办法
+#### 最终的解决办法
 
 为了让资源生成的代码执行顺序提前，可以先增加一个名为AppPrepare的Command类型项目，来运行此Shell。然后在Xcode项目Target Dependencies中添加AppPrepare项目，这样就会先运行AppPrepare的项目后才会运行Xcode项目，从而达到了我们的目的。
 ![](../images/appprepare.png)
